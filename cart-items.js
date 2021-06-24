@@ -40,11 +40,11 @@ cart.get("/", (req, res) => {
     let maxPrice = req.query.maxPrice;
     let returnCart = cartItems;
     if (maxPrice){
-      returnCart = cartItems.filter((item)=> item.price.toLowerCase() === item.maxPrice.toLowerCase())
+      returnCart = cartItems.filter((item)=> item.price <= maxPrice)
     }
     let prefix = req.query.prefix;
     if(prefix){
-      returnCart = cartItems.filter((item)=> item.product.toLowerCase() === item.prefix.toLowerCase())
+      returnCart = cartItems.filter((item)=> item.product.startsWith(prefix))
     }
     let pageSize = req.query.pageSize;
     if(pageSize){
@@ -69,35 +69,28 @@ cart.get("/", (req, res) => {
   });
 
   cart.post("/", (req, res) => {
-      console.log(req.body);
       let test = req.body.test
       console.log("Test results:", test )
       let x = cartItems.length + 1;
-      // let newItems = {
-      //   id: x,
-      //   product:
-      // }
-    res.json("Adding new item..");
+      let newItem = req.body;
+      newItem.id = x;
+      cartItems.push(newItem);
+      res.status(201).json(cartItems);
+      res.json("Adding new item..");
   });
   
 
   cart.put("/:id", (req, res) => {
     let id = req.params.id;
-    let found = cartitems.find((item) => item.id === id);
+    let updatedCart = req.body;
+    let found = cartItems.findIndex((item) => item.id == id);
     if(found){
-
+      cartItems[found] = {...cartItems[found], ...updatedCart};
+      res.json(cartItems[found]);
     }else{
+      res.json("No item updates");
 
     }
-    let updatedCart = req.body;
-    cartItems[req.params.id] = {...cartItems[req.params.id], ...updatedCart};
-    res.json(cartItems[req.params.id]);
-
-
-    //id is not an index number in this case
-    //find index that matches id passed in
-    //use index to do something like this {...cartItems[req.params.id], ...updatedCart}
-    //create logic to find the id
 
   });
 
