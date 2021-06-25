@@ -31,7 +31,38 @@ let cartItems = [
         product: "sketchbook",
         price: 27,
         quantity: 10
+    },
+    {
+        id: 6,
+        product: "paint brush",
+        price: 22,
+        quantity: 4
+    },
+    {
+        id: 7,
+        product: "paint",
+        price: 40,
+        quantity: 1
+    },
+    {
+        id: 8,
+        product: "canvas",
+        price: 50,
+        quantity: 15
+    },
+    {
+        id: 9,
+        product: "markers",
+        price: 14,
+        quantity: 2
+    },
+    {
+        id: 10,
+        product: "posters",
+        price: 65,
+        quantity: 8
     }
+    
 ];
 
 cart.get("/", (req, res) => {
@@ -44,13 +75,13 @@ cart.get("/", (req, res) => {
     }
     let prefix = req.query.prefix;
     if(prefix){
-      returnCart = cartItems.filter((item)=> item.product.startsWith(prefix))
+      returnCart = returnCart.filter((item)=> item.product.startsWith(prefix))
     }
     let pageSize = req.query.pageSize;
     if(pageSize){
-      returnCart = cartItems.slice(0, pageSize);
-      
+      returnCart = returnCart.slice(0, pageSize);
     }
+
     res.json(returnCart);
   });
 
